@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}The Doppelgänger Protocol{% endblock %}</title>
+    <meta name="description" content="Human-layer authentication using shared memory as a cryptographic trust anchor. No passwords. No biometrics. No AI can fake it.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <header>
+        <a href="/verify" class="wordmark">Doppelgänger Protocol™</a>
+        <a href="https://realxreal.app" class="protocol-tag" target="_blank">
+            Mobile app: realxreal ↗
+        </a>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <span>End-to-end encrypted · No accounts · Sessions expire in 30 min</span>
+        <a href="https://github.com/doppelgangerprotocol/web" target="_blank">Open source ↗</a>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
