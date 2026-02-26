@@ -15,6 +15,9 @@ qrcode[pil]==7.4.2
 # HTTP client — embedding microservice proxy
 requests==2.32.3
 
+# Firebase service account auth (server-to-server token generation)
+google-auth==2.29.0
+
 # Environment variables
 python-dotenv==1.0.1
 

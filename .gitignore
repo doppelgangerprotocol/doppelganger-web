@@ -217,3 +217,5 @@ __pycache__/
 .DS_Store
 instance/
 railway.toml
+
+dump.rdb
