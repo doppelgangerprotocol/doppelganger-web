@@ -1,0 +1,23 @@
+# Web framework
+flask==3.0.3
+flask-cors==4.0.1
+flask-limiter==3.8.0
+
+# Redis — session store + pub/sub
+redis==5.0.8
+
+# Production server
+gunicorn==22.0.0
+
+# QR code generation
+qrcode[pil]==7.4.2
+
+# HTTP client — embedding microservice proxy
+requests==2.32.3
+
+# Environment variables
+python-dotenv==1.0.1
+
+# Testing
+pytest==8.3.3
+pytest-flask==1.3.0
