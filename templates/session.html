@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Answer the Challenge — Doppelgänger Protocol{% endblock %}
+
+{% block content %}
+<div data-session-id="{{ session_id }}">
+
+    <!-- Loading -->
+    <div id="step-loading" class="step">
+        <div class="loader"></div>
+        <p style="margin-top:16px; color: var(--text-muted);">Loading challenge...</p>
+    </div>
+
+    <!-- Step 1: Bob generates keys + sees question -->
+    <div id="step-bob-challenge" class="step hidden">
+        <div class="phase-icon">🔑</div>
+        <p class="from-label">Challenge from <strong id="alice-name-display"></strong></p>
+        <h2 id="challenge-question" class="challenge-q"></h2>
+
+        <div class="key-status" id="bob-key-status">
+            <span class="pulse"></span>
+            <span>Generating your encryption keys in your browser...</span>
+        </div>
+
+        <div class="form-group" style="margin-top: 24px;">
+            <label>Your name</label>
+            <input type="text" id="bob-name" placeholder="Bob" maxlength="50" />
+        </div>
+
+        <div class="form-group">
+            <label>Your answer</label>
+            <textarea id="bob-answer"
+                placeholder="Answer in your own words — exact wording doesn't matter"
+                maxlength="500" rows="3"></textarea>
+        </div>
+
+        <button class="btn-primary" id="submit-btn" onclick="Session.submitAnswer()" disabled>
+            Submit Answer
+        </button>
+        <p class="privacy-note">🔐 Your keys were generated here, in your browser. Nothing was installed.</p>
+    </div>
+
+    <!-- Scoring -->
+    <div id="step-scoring" class="step hidden">
+        <div class="loader"></div>
+        <p style="margin-top:16px;">Comparing your answer to the original memory...</p>
+    </div>
+
+    <!-- PASS -->
+    <div id="step-bob-pass" class="step hidden">
+        <div class="phase-icon">✅</div>
+        <h2>Identity Verified.</h2>
+        <p class="emphasis">Your answer matched. The encrypted channel is now open.</p>
+        <div class="crypto-proof">
+            <div class="proof-row">
+                <span class="label">Memory match</span>
+                <span class="value success" id="bob-score"></span>
+            </div>
+            <div class="proof-row">
+                <span class="label">Key exchange</span>
+                <span class="value success">Complete ✓</span>
+            </div>
+            <div class="proof-row">
+                <span class="label">How trust was established</span>
+                <span class="value success">Shared memory ✓</span>
+            </div>
+        </div>
+        <p class="result-note">
+            Alice's public key was just delivered to your device — because you proved you're the Bob she knows.
+            The server never made that decision. Your memory did.
+        </p>
+    </div>
+
+    <!-- FAIL -->
+    <div id="step-bob-fail" class="step hidden">
+        <div class="phase-icon">🚫</div>
+        <h2>Verification Failed.</h2>
+        <p>Your answer didn't match the memory. No key exchange occurred.</p>
+        <div class="proof-row">
+            <span class="label">Memory match</span>
+            <span class="value danger" id="bob-fail-score"></span>
+        </div>
+        <p class="result-note">Alice's public key was never shared with you. The channel stayed closed.</p>
+    </div>
+
+    <!-- Expired -->
+    <div id="step-expired" class="step hidden">
+        <div class="phase-icon">⏱</div>
+        <h2>This link has expired.</h2>
+        <p>Sessions last 30 minutes. Ask Alice to send a new challenge.</p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/crypto.js"></script>
+<script src="/static/js/session.js"></script>
+<script src="/static/js/ui.js"></script>
+<script>
+    const SESSION_ID = "{{ session_id }}";
+    window.addEventListener("DOMContentLoaded", () => Session.initBob(SESSION_ID));
+</script>
+{% endblock %}
