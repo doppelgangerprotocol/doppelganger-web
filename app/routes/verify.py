@@ -22,7 +22,7 @@ verify_bp = Blueprint("verify", __name__)
 
 
 @verify_bp.route("/session/<session_id>/verify", methods=["POST"])
-@limiter.limit("5 per minute")
+@limiter.limit("20 per minute")
 def verify(session_id):
     """
     Bob submits his answer and public key.
