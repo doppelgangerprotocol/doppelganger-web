@@ -552,3 +552,15 @@ textarea::placeholder { color: var(--text-muted); }
 .fade-in {
     animation: fadeIn 0.3s ease;
 }
+
+.screen {
+    animation: fadeIn 0.25s ease;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+.fade-in {
+    animation: fadeIn 0.25s ease;
+}
