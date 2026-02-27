@@ -171,3 +171,65 @@ textarea::placeholder,
 }
 
 .key-status.ready { color: var(--text); }
+
+@media (max-width: 480px) {
+    /* Larger tap targets — Apple HIG minimum 44px */
+    .btn-primary {
+        width: 100%;
+        padding: 16px 24px;
+        font-size: 14px;
+        text-align: center;
+        min-height: 52px;
+    }
+
+    .btn-secondary {
+        width: 100%;
+        padding: 14px 20px;
+        text-align: center;
+        min-height: 48px;
+    }
+
+    /* Forms */
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group input {
+        font-size: 16px; /* prevents iOS zoom on focus */
+        padding: 14px 16px;
+        min-height: 52px;
+    }
+
+    textarea {
+        font-size: 16px; /* prevents iOS zoom on focus */
+        padding: 14px 16px;
+    }
+
+    /* Link box — prevent overflow */
+    .link-box {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .link-box code {
+        font-size: 11px;
+        white-space: normal;
+        word-break: break-all;
+    }
+
+    .link-box .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* QR code — bigger on mobile since it's the primary action */
+    #qr-code {
+        width: 220px;
+        height: 220px;
+    }
+
+    .key-status {
+        font-size: 11px;
+    }
+}
