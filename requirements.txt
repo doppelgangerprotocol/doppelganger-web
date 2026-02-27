@@ -1,26 +1,26 @@
 # Web framework
 flask==3.0.3
-flask-cors==4.0.1
-flask-limiter==3.8.0
+flask-cors==6.0.2
+flask-limiter==4.1.1
 
 # Redis — session store + pub/sub
-redis==5.0.8
+redis==7.2.1
 
 # Production server
-gunicorn==22.0.0
+gunicorn==25.1.0
 
 # QR code generation
-qrcode[pil]==7.4.2
+qrcode[pil]==8.2
 
 # HTTP client — embedding microservice proxy
 requests==2.32.3
 
-# Firebase service account auth (server-to-server token generation)
-google-auth==2.29.0
+# Cosine similarity
+numpy
 
 # Environment variables
 python-dotenv==1.0.1
 
 # Testing
-pytest==8.3.3
+pytest==9.0.2
 pytest-flask==1.3.0
