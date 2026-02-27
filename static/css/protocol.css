@@ -1,21 +1,12 @@
 /* ============================================================
    protocol.css — Doppelgänger Protocol-specific UI
-   Screens, transitions, proof panels, results, loader, pulse
    ============================================================ */
 
 /* ── Screen transitions ───────────────────────────────────── */
 
-.screen {
-    animation: fadeIn 0.25s ease;
-}
-
-.screen.hidden {
-    display: none;
-}
-
-.fade-in {
-    animation: fadeIn 0.25s ease;
-}
+.screen { animation: fadeIn 0.25s ease; }
+.screen.hidden { display: none; }
+.fade-in { animation: fadeIn 0.25s ease; }
 
 /* ── Phase icon ───────────────────────────────────────────── */
 
@@ -27,20 +18,21 @@
 /* ── Emphasis text ────────────────────────────────────────── */
 
 .emphasis {
-    color: var(--accent) !important;
+    color: var(--text) !important;
     font-family: var(--mono);
     font-size: 14px !important;
     margin-bottom: var(--space-md);
 }
 
-/* ── From label (Bob's challenge page) ───────────────────── */
+/* ── From label ───────────────────────────────────────────── */
 
 .from-label {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
     color: var(--text-muted);
     margin-bottom: 12px;
-    letter-spacing: 0.5px;
 }
 
 /* ── Waiting state ────────────────────────────────────────── */
@@ -55,9 +47,9 @@
 }
 
 .pulse {
-    width: 8px;
-    height: 8px;
-    background: var(--accent);
+    width: 6px;
+    height: 6px;
+    background: var(--text);
     border-radius: 50%;
     flex-shrink: 0;
     animation: pulse 1.5s ease-in-out infinite;
@@ -80,29 +72,30 @@
     padding: var(--space-sm) 0;
     border-bottom: 1px solid var(--border);
     font-family: var(--mono);
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .proof-row:last-child { border-bottom: none; }
 
 .proof-row .label         { color: var(--text-muted); }
-.proof-row .value.success { color: var(--accent); }
+.proof-row .value.success { color: var(--success); }
 .proof-row .value.danger  { color: var(--danger); }
 
 .result-note {
     color: var(--text-muted);
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 13px;
+    line-height: 1.7;
     margin-top: var(--space-sm);
+    font-family: var(--mono);
 }
 
 /* ── Loader spinner ───────────────────────────────────────── */
 
 .loader {
-    width: 24px;
-    height: 24px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--border);
+    border-top-color: var(--text);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin-top: var(--space-sm);

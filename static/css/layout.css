@@ -13,11 +13,11 @@ header {
 
 .wordmark {
     font-family: var(--mono);
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--accent);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
     text-decoration: none;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.5px;
 }
 
 .protocol-tag {
@@ -28,12 +28,18 @@ header {
     padding: var(--space-xs) 10px;
     border-radius: var(--radius-sm);
     text-decoration: none;
+    transition: color var(--transition), border-color var(--transition);
+}
+
+.protocol-tag:hover {
+    color: var(--text);
+    border-color: var(--text);
 }
 
 /* Main */
 main {
     flex: 1;
-    max-width: 680px;
+    max-width: 640px;
     margin: 0 auto;
     padding: var(--space-3xl) var(--space-lg);
     width: 100%;
@@ -46,7 +52,7 @@ footer {
     align-items: center;
     padding: var(--space-md) 32px;
     border-top: 1px solid var(--border);
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-muted);
     font-family: var(--mono);
 }
@@ -57,51 +63,57 @@ footer a {
     transition: color var(--transition);
 }
 
-footer a:hover { color: var(--accent); }
+footer a:hover { color: var(--text); }
 
 /* Subtitle */
 .subtitle {
-    font-size: 17px;
+    font-size: 16px;
     color: var(--text-muted);
-    line-height: 1.6;
+    line-height: 1.7;
     margin-bottom: var(--space-2xl);
-    max-width: 520px;
+    max-width: 500px;
+    font-family: var(--mono);
 }
 
-/* How it works — landing page only */
+/* How it works — landing page */
 .how-it-works {
     display: flex;
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 40px;
     flex-wrap: wrap;
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
 .step-item {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     flex: 1;
     min-width: 140px;
 }
 
 .step-num {
     font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 1px;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 .step-item span:last-child {
     font-size: 13px;
     color: var(--text-muted);
-    line-height: 1.4;
+    line-height: 1.5;
+    font-family: var(--mono);
 }
 
 .step-arrow {
     color: var(--border);
-    font-size: 20px;
-    padding-top: 8px;
+    font-size: 16px;
+    padding-top: 4px;
 }
 
 /* Responsive */
@@ -109,7 +121,6 @@ footer a:hover { color: var(--accent); }
     header  { padding: var(--space-md) 20px; }
     main    { padding: 40px 20px; }
     footer  { flex-direction: column; gap: var(--space-sm); text-align: center; }
-
     .how-it-works  { flex-direction: column; }
     .step-arrow    { display: none; }
 }
