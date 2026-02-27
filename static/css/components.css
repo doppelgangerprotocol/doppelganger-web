@@ -1,0 +1,172 @@
+/* ============================================================
+   components.css — reusable UI components
+   ============================================================ */
+
+/* ── Buttons ─────────────────────────────────────────────── */
+
+.btn-primary {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 14px 28px;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: opacity var(--transition);
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover    { opacity: 0.85; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    font-family: var(--mono);
+    font-size: 13px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: border-color var(--transition);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary:hover { border-color: var(--accent); }
+
+/* ── Forms ───────────────────────────────────────────────── */
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+.label-note {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.form-group input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px var(--space-md);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    transition: border-color var(--transition);
+}
+
+textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    resize: vertical;
+    transition: border-color var(--transition);
+}
+
+.form-group input:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+textarea::placeholder,
+.form-group input::placeholder { color: var(--text-muted); }
+
+.char-count {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.privacy-note {
+    margin-top: var(--space-md);
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+}
+
+/* ── Link box ─────────────────────────────────────────────── */
+
+.link-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.link-box code {
+    flex: 1;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── QR Code ──────────────────────────────────────────────── */
+
+#qr-container {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+#qr-code {
+    width: 180px;
+    height: 180px;
+    border: 8px solid white;
+    border-radius: var(--radius-sm);
+}
+
+.qr-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: var(--space-sm);
+}
+
+/* ── Key status ───────────────────────────────────────────── */
+
+.key-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.key-status.ready { color: var(--accent); }

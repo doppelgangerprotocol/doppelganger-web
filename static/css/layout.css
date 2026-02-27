@@ -1,0 +1,115 @@
+/* ============================================================
+   layout.css — header, main, footer, responsive
+   ============================================================ */
+
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+    border-bottom: 1px solid var(--border);
+}
+
+.wordmark {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.protocol-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: var(--space-xs) 10px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+}
+
+/* Main */
+main {
+    flex: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: var(--space-3xl) var(--space-lg);
+    width: 100%;
+}
+
+/* Footer */
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) 32px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+}
+
+footer a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+footer a:hover { color: var(--accent); }
+
+/* Subtitle */
+.subtitle {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--space-2xl);
+    max-width: 520px;
+}
+
+/* How it works — landing page only */
+.how-it-works {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 140px;
+}
+
+.step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+}
+
+.step-item span:last-child {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.step-arrow {
+    color: var(--border);
+    font-size: 20px;
+    padding-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    header  { padding: var(--space-md) 20px; }
+    main    { padding: 40px 20px; }
+    footer  { flex-direction: column; gap: var(--space-sm); text-align: center; }
+
+    .how-it-works  { flex-direction: column; }
+    .step-arrow    { display: none; }
+}

@@ -177,7 +177,8 @@ const Session = (() => {
     }
 
     async function submitAnswer() {
-        const sessionId = document.querySelector("[data-session-id]")?.dataset.sessionId;
+        // const sessionId = document.querySelector("[data-session-id]")?.dataset.sessionId;
+        const sessionId = SESSION_ID;
         const bobName = document.getElementById("bob-name").value.trim();
         const answer = document.getElementById("bob-answer").value.trim();
 

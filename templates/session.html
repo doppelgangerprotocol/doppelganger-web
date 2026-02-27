@@ -2,26 +2,20 @@
 {% block title %}Answer the Challenge — Doppelgänger Protocol{% endblock %}
 
 {% block content %}
-<div data-session-id="{{ session_id }}">
 
     <!-- Screen 1: Loading -->
     <div id="step-loading" class="screen">
         <div class="loader"></div>
-        <p style="margin-top:16px; color: var(--text-muted);">Loading challenge...</p>
+        <p style="margin-top:16px;">Loading challenge...</p>
     </div>
 
     <!-- Screen 2: Bob sees question + fills answer -->
     <div id="step-bob-challenge" class="screen hidden">
-        <div class="phase-icon">🔑</div>
         <p class="from-label">Challenge from <strong id="alice-name-display"></strong></p>
-        <h2 id="challenge-question" class="challenge-q"></h2>
+        <h2 id="challenge-question"></h2>
+        <p class="subtitle">Answer in your own words — exact wording doesn't matter.</p>
 
-        <div class="key-status" id="bob-key-status">
-            <span class="pulse"></span>
-            <span>Generating your encryption keys in your browser...</span>
-        </div>
-
-        <div class="form-group" style="margin-top: 24px;">
+        <div class="form-group">
             <label>Your name</label>
             <input type="text" id="bob-name" placeholder="Bob" maxlength="50" />
         </div>
@@ -29,8 +23,13 @@
         <div class="form-group">
             <label>Your answer</label>
             <textarea id="bob-answer"
-                placeholder="Answer in your own words — exact wording doesn't matter"
-                maxlength="500" rows="3"></textarea>
+                placeholder="e.g. Chicken burrito bowl with extra guac"
+                maxlength="500" rows="2"></textarea>
+        </div>
+
+        <div class="key-status" id="bob-key-status">
+            <span class="pulse"></span>
+            <span>Generating your encryption keys in your browser...</span>
         </div>
 
         <button class="btn-primary" id="submit-btn" onclick="Session.submitAnswer()" disabled>
@@ -42,7 +41,7 @@
     <!-- Screen 3: Scoring in progress -->
     <div id="step-scoring" class="screen hidden">
         <div class="loader"></div>
-        <p style="margin-top: 16px; color: var(--text-muted);">Comparing your answer to the original memory...</p>
+        <p style="margin-top: 16px;">Comparing your answer to the original memory...</p>
     </div>
 
     <!-- Screen 4A: Bob passed -->
@@ -97,7 +96,6 @@
         <p>Sessions last 30 minutes and can only be used once.<br>Ask Alice to send a new challenge.</p>
     </div>
 
-</div>
 {% endblock %}
 
 {% block scripts %}
