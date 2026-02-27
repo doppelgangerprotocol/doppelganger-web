@@ -5,15 +5,21 @@
 const UI = (() => {
 
     function showStep(stepId) {
-        document.querySelectorAll(".step").forEach(el => el.classList.add("hidden"));
+        // .screen targets only full-page screens — avoids conflict with
+        // .step-item elements in the landing page how-it-works section
+        document.querySelectorAll(".screen").forEach(el => {
+            el.classList.add("hidden");
+            el.classList.remove("fade-in");
+        });
         const el = document.getElementById(stepId);
         if (el) {
             el.classList.remove("hidden");
+            void el.offsetWidth; // force reflow so fade-in replays every time
             el.classList.add("fade-in");
         }
     }
 
-    // Character counters
+    // Character counters for Alice's form
     document.addEventListener("DOMContentLoaded", () => {
         const counters = [
             ["memory-question", "q-count"],

@@ -4,14 +4,14 @@
 {% block content %}
 <div data-session-id="{{ session_id }}">
 
-    <!-- Loading -->
-    <div id="step-loading" class="step">
+    <!-- Screen 1: Loading -->
+    <div id="step-loading" class="screen">
         <div class="loader"></div>
         <p style="margin-top:16px; color: var(--text-muted);">Loading challenge...</p>
     </div>
 
-    <!-- Step 1: Bob generates keys + sees question -->
-    <div id="step-bob-challenge" class="step hidden">
+    <!-- Screen 2: Bob sees question + fills answer -->
+    <div id="step-bob-challenge" class="screen hidden">
         <div class="phase-icon">🔑</div>
         <p class="from-label">Challenge from <strong id="alice-name-display"></strong></p>
         <h2 id="challenge-question" class="challenge-q"></h2>
@@ -39,18 +39,18 @@
         <p class="privacy-note">🔐 Your keys were generated here, in your browser. Nothing was installed.</p>
     </div>
 
-    <!-- Scoring -->
-    <div id="step-scoring" class="step hidden">
+    <!-- Screen 3: Scoring in progress -->
+    <div id="step-scoring" class="screen hidden">
         <div class="loader"></div>
-        <p style="margin-top:16px;">Comparing your answer to the original memory...</p>
+        <p style="margin-top: 16px; color: var(--text-muted);">Comparing your answer to the original memory...</p>
     </div>
 
-    <!-- PASS -->
-    <div id="step-bob-pass" class="step hidden">
+    <!-- Screen 4A: Bob passed -->
+    <div id="step-bob-pass" class="screen hidden">
         <div class="phase-icon">✅</div>
         <h2>Identity Verified.</h2>
         <p class="emphasis">Your answer matched. The encrypted channel is now open.</p>
-        <div class="crypto-proof">
+        <div class="result-details">
             <div class="proof-row">
                 <span class="label">Memory match</span>
                 <span class="value success" id="bob-score"></span>
@@ -68,25 +68,33 @@
             Alice's public key was just delivered to your device — because you proved you're the Bob she knows.
             The server never made that decision. Your memory did.
         </p>
+        <a href="/verify" class="btn-secondary" style="display:inline-block; margin-top: 32px;">Start New Verification</a>
     </div>
 
-    <!-- FAIL -->
-    <div id="step-bob-fail" class="step hidden">
+    <!-- Screen 4B: Bob failed -->
+    <div id="step-bob-fail" class="screen hidden">
         <div class="phase-icon">🚫</div>
         <h2>Verification Failed.</h2>
         <p>Your answer didn't match the memory. No key exchange occurred.</p>
-        <div class="proof-row">
-            <span class="label">Memory match</span>
-            <span class="value danger" id="bob-fail-score"></span>
+        <div class="result-details">
+            <div class="proof-row">
+                <span class="label">Memory match</span>
+                <span class="value danger" id="bob-fail-score"></span>
+            </div>
+            <div class="proof-row">
+                <span class="label">Key exchange</span>
+                <span class="value danger">Not completed ✗</span>
+            </div>
         </div>
         <p class="result-note">Alice's public key was never shared with you. The channel stayed closed.</p>
+        <a href="/verify" class="btn-secondary" style="display:inline-block; margin-top: 32px;">Try Again</a>
     </div>
 
-    <!-- Expired -->
-    <div id="step-expired" class="step hidden">
+    <!-- Screen 5: Expired / already used -->
+    <div id="step-expired" class="screen hidden">
         <div class="phase-icon">⏱</div>
         <h2>This link has expired.</h2>
-        <p>Sessions last 30 minutes. Ask Alice to send a new challenge.</p>
+        <p>Sessions last 30 minutes and can only be used once.<br>Ask Alice to send a new challenge.</p>
     </div>
 
 </div>

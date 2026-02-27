@@ -2,8 +2,9 @@
 {% block title %}Verify Identity — Doppelgänger Protocol{% endblock %}
 
 {% block content %}
-<!-- Step 1: Landing -->
-<div id="step-landing" class="step">
+
+<!-- Screen 1: Landing -->
+<div id="step-landing" class="screen">
     <h1>Your memory is<br>the password.</h1>
     <p class="subtitle">
         Prove someone is who they say they are — using a shared memory
@@ -30,8 +31,8 @@
     </button>
 </div>
 
-<!-- Step 2: Alice creates memory challenge -->
-<div id="step-create" class="step hidden">
+<!-- Screen 2: Alice creates memory challenge -->
+<div id="step-create" class="screen hidden">
     <h2>Create your challenge</h2>
     <p class="subtitle">Ask something only the real person would know.<br>
     Your encryption keys are being generated in your browser right now.</p>
@@ -68,8 +69,8 @@
     <p class="privacy-note">🔐 Your answer is converted to a mathematical vector — the raw text is never sent to the server.</p>
 </div>
 
-<!-- Step 3: Show QR + link, wait for Bob -->
-<div id="step-waiting" class="step hidden">
+<!-- Screen 3: Share link, wait for Bob -->
+<div id="step-waiting" class="screen hidden">
     <h2>Share this with Bob.</h2>
     <p class="subtitle">This link contains your memory question and your public key.<br>
     Bob must answer correctly before the encrypted channel opens.</p>
@@ -90,8 +91,8 @@
     </div>
 </div>
 
-<!-- Step 4A: Bob passed — Alice gets his pubkey -->
-<div id="step-alice-pass" class="step hidden">
+<!-- Screen 4A: Bob passed -->
+<div id="step-alice-pass" class="screen hidden">
     <div class="phase-icon">🔐</div>
     <h2>Identity Verified.</h2>
     <p class="emphasis">Bob answered correctly. The channel is now open.</p>
@@ -111,20 +112,28 @@
     </div>
     <p class="result-note">Bob's public key has been delivered to your device.<br>
     You can now communicate with cryptographic proof of his identity.</p>
+    <button class="btn-secondary" style="margin-top: 32px;" onclick="UI.showStep('step-create')">Start New Verification</button>
 </div>
 
-<!-- Step 4B: Bob failed -->
-<div id="step-alice-fail" class="step hidden">
+<!-- Screen 4B: Bob failed -->
+<div id="step-alice-fail" class="screen hidden">
     <div class="phase-icon">🚫</div>
     <h2>Verification Failed.</h2>
     <p>The answer didn't match your memory. No key exchange occurred.</p>
-    <div class="proof-row">
-        <span class="label">Memory match</span>
-        <span class="value danger" id="alice-fail-score"></span>
+    <div class="result-details">
+        <div class="proof-row">
+            <span class="label">Memory match</span>
+            <span class="value danger" id="alice-fail-score"></span>
+        </div>
+        <div class="proof-row">
+            <span class="label">Key exchange</span>
+            <span class="value danger">Not completed ✗</span>
+        </div>
     </div>
     <p class="result-note">Alice's public key was never shared. The channel stayed closed.</p>
-    <button class="btn-secondary" onclick="UI.showStep('step-create')">Try Again</button>
+    <button class="btn-secondary" style="margin-top: 32px;" onclick="UI.showStep('step-create')">Try Again</button>
 </div>
+
 {% endblock %}
 
 {% block scripts %}

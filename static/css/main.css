@@ -564,3 +564,19 @@ textarea::placeholder { color: var(--text-muted); }
 .fade-in {
     animation: fadeIn 0.25s ease;
 }
+
+/* Bob's challenge question — match Alice's heading scale */
+.challenge-q {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+    margin-bottom: 28px;
+}
+
+h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+}
