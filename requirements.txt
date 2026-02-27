@@ -16,7 +16,7 @@ qrcode[pil]==8.2
 requests==2.32.3
 
 # Cosine similarity
-numpy
+numpy<2.0.0
 
 # Environment variables
 python-dotenv==1.0.1
