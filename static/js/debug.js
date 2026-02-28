@@ -2,10 +2,11 @@
  * debug.js — Doppelgänger Protocol live debug panel
  *
  * Renders a sliding panel showing cryptographic operations in real time.
+ * Panel opens alongside the main content — does not cover it.
  * Completely decoupled from protocol logic — call ProtocolLog.emit()
  * from anywhere and it appears here.
  *
- * Event types and their colors:
+ * Event types:
  *   key      — ECDH key generation, derivation
  *   network  — API calls, SSE events
  *   embed    — embedding vectors, cosine similarity
@@ -18,6 +19,7 @@ const ProtocolLog = (() => {
 
     let isOpen = false;
     let entryCount = 0;
+    const PANEL_WIDTH = 400;
 
     // ── Bootstrap ──────────────────────────────────────────────────────────
 
@@ -28,7 +30,6 @@ const ProtocolLog = (() => {
     }
 
     function injectHTML() {
-        // Floating trigger button
         const trigger = document.createElement("button");
         trigger.id = "debug-trigger";
         trigger.innerHTML = `
@@ -37,7 +38,6 @@ const ProtocolLog = (() => {
         `;
         trigger.setAttribute("aria-label", "Open Protocol Log");
 
-        // Panel
         const panel = document.createElement("div");
         panel.id = "debug-panel";
         panel.setAttribute("aria-hidden", "true");
@@ -62,9 +62,7 @@ const ProtocolLog = (() => {
                 <span class="legend-item phase">PHASE</span>
             </div>
             <div class="debug-log" id="debug-log">
-                <div class="debug-empty">
-                    Waiting for protocol events...
-                </div>
+                <div class="debug-empty">Waiting for protocol events...</div>
             </div>
             <div class="debug-footer">
                 <span id="debug-entry-count">0 events</span>
@@ -72,13 +70,8 @@ const ProtocolLog = (() => {
             </div>
         `;
 
-        // Overlay (click outside to close)
-        const overlay = document.createElement("div");
-        overlay.id = "debug-overlay";
-
         document.body.appendChild(trigger);
         document.body.appendChild(panel);
-        document.body.appendChild(overlay);
     }
 
     function injectCSS() {
@@ -87,7 +80,7 @@ const ProtocolLog = (() => {
             /* ── Trigger button ───────────────────────────────── */
             #debug-trigger {
                 position: fixed;
-                bottom: 24px;
+                bottom: 72px;     /* raised above footer */
                 right: 24px;
                 z-index: 900;
                 display: flex;
@@ -104,36 +97,24 @@ const ProtocolLog = (() => {
                 cursor: pointer;
                 letter-spacing: 0.5px;
                 box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-                transition: opacity 0.15s;
+                transition: opacity 0.15s, right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
             #debug-trigger:hover { opacity: 0.8; }
 
-            .debug-trigger-icon {
-                font-size: 14px;
-                opacity: 0.7;
+            /* Slide trigger left when panel is open */
+            #debug-trigger.panel-open {
+                right: ${PANEL_WIDTH + 16}px;
             }
 
-            /* ── Overlay ──────────────────────────────────────── */
-            #debug-overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                z-index: 910;
-                background: rgba(26, 24, 20, 0.3);
-            }
-
-            #debug-overlay.visible { display: block; }
-
-            /* ── Panel ────────────────────────────────────────── */
+            /* ── Panel — sits on the right, content shifts left ── */
             #debug-panel {
                 position: fixed;
                 top: 0;
-                right: -480px;
-                width: 440px;
-                max-width: 92vw;
+                right: -${PANEL_WIDTH + 2}px;
+                width: ${PANEL_WIDTH}px;
                 height: 100vh;
-                z-index: 920;
+                z-index: 800;
                 background: var(--bg);
                 border-left: 1px solid var(--border);
                 display: flex;
@@ -144,7 +125,13 @@ const ProtocolLog = (() => {
 
             #debug-panel.open {
                 right: 0;
-                box-shadow: -8px 0 32px rgba(26,24,20,0.12);
+                box-shadow: -4px 0 24px rgba(26,24,20,0.08);
+            }
+
+            /* Push body content left when panel opens */
+            body.debug-panel-open {
+                padding-right: ${PANEL_WIDTH}px;
+                transition: padding-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
             /* ── Header ───────────────────────────────────────── */
@@ -232,7 +219,7 @@ const ProtocolLog = (() => {
             .legend-item.key     { background: #e8f0eb; color: #2d5a3d; }
             .legend-item.network { background: #e8eaf0; color: #2d3d5a; }
             .legend-item.embed   { background: #f0ebe8; color: #5a3d2d; }
-            .legend-item.score   { background: #f0ebe8; color: #8b2020; }
+            .legend-item.score   { background: #f0f0e8; color: #5a4f2d; }
             .legend-item.phase   { background: #ede8f0; color: #3d2d5a; }
 
             /* ── Log area ─────────────────────────────────────── */
@@ -332,40 +319,52 @@ const ProtocolLog = (() => {
                 flex-shrink: 0;
             }
 
-            /* ── Mobile ───────────────────────────────────────── */
-            @media (max-width: 480px) {
+            /* ── Mobile — full width, no body shift ───────────── */
+            @media (max-width: 600px) {
                 #debug-panel {
                     width: 100vw;
-                    max-width: 100vw;
+                    right: -100vw;
                 }
 
                 #debug-trigger {
-                    bottom: 16px;
+                    bottom: 80px;
                     right: 16px;
                     padding: 10px 14px;
                 }
 
                 .debug-trigger-label { display: none; }
+
+                /* On mobile, panel overlays — don't shift body */
+                body.debug-panel-open {
+                    padding-right: 0;
+                }
+
+                #debug-trigger.panel-open {
+                    right: 16px;
+                }
             }
         `;
         document.head.appendChild(style);
     }
 
     function bindEvents() {
-        document.getElementById("debug-trigger").addEventListener("click", open);
+        document.getElementById("debug-trigger").addEventListener("click", toggle);
         document.getElementById("debug-close").addEventListener("click", close);
-        document.getElementById("debug-overlay").addEventListener("click", close);
         document.getElementById("debug-clear").addEventListener("click", clear);
     }
 
     // ── Panel open/close ───────────────────────────────────────────────────
 
+    function toggle() {
+        isOpen ? close() : open();
+    }
+
     function open() {
         isOpen = true;
         document.getElementById("debug-panel").classList.add("open");
         document.getElementById("debug-panel").setAttribute("aria-hidden", "false");
-        document.getElementById("debug-overlay").classList.add("visible");
-        // Scroll to bottom when opening
+        document.getElementById("debug-trigger").classList.add("panel-open");
+        document.body.classList.add("debug-panel-open");
         scrollToBottom();
     }
 
@@ -373,7 +372,8 @@ const ProtocolLog = (() => {
         isOpen = false;
         document.getElementById("debug-panel").classList.remove("open");
         document.getElementById("debug-panel").setAttribute("aria-hidden", "true");
-        document.getElementById("debug-overlay").classList.remove("visible");
+        document.getElementById("debug-trigger").classList.remove("panel-open");
+        document.body.classList.remove("debug-panel-open");
     }
 
     function clear() {
@@ -384,36 +384,18 @@ const ProtocolLog = (() => {
         document.getElementById("debug-live-dot").classList.remove("active");
     }
 
-    // ── Emit a log entry ───────────────────────────────────────────────────
+    // ── Emit ───────────────────────────────────────────────────────────────
 
-    /**
-     * emit(type, title, data)
-     *
-     * type:  "key" | "network" | "embed" | "score" | "phase" | "info"
-     * title: short description shown in bold
-     * data:  object with key-value pairs to display, or null
-     *
-     * Examples:
-     *   ProtocolLog.emit("key", "Alice keypair generated", {
-     *       curve: "P-256",
-     *       public_x: jwk.x.slice(0, 12) + "...",
-     *       public_y: jwk.y.slice(0, 12) + "...",
-     *       extractable: false
-     *   });
-     */
     function emit(type, title, data = null) {
         entryCount++;
 
-        // Remove empty state
         const log = document.getElementById("debug-log");
         const empty = log.querySelector(".debug-empty");
         if (empty) empty.remove();
 
-        // Pulse the live dot
         const dot = document.getElementById("debug-live-dot");
         dot.classList.add("active");
 
-        // Timestamp
         const now = new Date();
         const time = now.toLocaleTimeString("en-US", {
             hour12: false,
@@ -422,7 +404,6 @@ const ProtocolLog = (() => {
             second: "2-digit"
         }) + "." + String(now.getMilliseconds()).padStart(3, "0");
 
-        // Build entry
         const entry = document.createElement("div");
         entry.className = "debug-entry";
 
@@ -451,11 +432,9 @@ const ProtocolLog = (() => {
 
         log.appendChild(entry);
 
-        // Update count
         document.getElementById("debug-entry-count").textContent =
             `${entryCount} event${entryCount !== 1 ? "s" : ""}`;
 
-        // Auto-scroll if panel is open
         if (isOpen) scrollToBottom();
     }
 
@@ -465,7 +444,6 @@ const ProtocolLog = (() => {
     }
 
     // ── Convenience emitters ───────────────────────────────────────────────
-    // Pre-formatted for each protocol event type
 
     function keyGenerated(role, jwk) {
         emit("key", `${role} keypair generated`, {
@@ -548,7 +526,6 @@ const ProtocolLog = (() => {
         });
     }
 
-    // Public API
     return {
         init,
         emit,
@@ -565,5 +542,4 @@ const ProtocolLog = (() => {
 
 })();
 
-// Auto-init when DOM is ready
 document.addEventListener("DOMContentLoaded", () => ProtocolLog.init());
