@@ -21,9 +21,15 @@
 
     <footer>
         <span>End-to-end encrypted · No accounts · Sessions expire in 30 min</span>
-        <a href="https://github.com/doppelgangerprotocol/doppelganger-web" target="_blank">Open source ↗</a>
+        <a href="https://github.com/doppelgangerprotocol/web" target="_blank">Open source ↗</a>
     </footer>
 
+    <!--
+        debug.js loads last so ProtocolLog is available to all other scripts.
+        It injects its own HTML and CSS — no changes needed to templates.
+        Remove this line to disable the debug panel in any environment.
+    -->
     {% block scripts %}{% endblock %}
+    <script src="/static/js/debug.js"></script>
 </body>
 </html>
