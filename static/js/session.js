@@ -135,6 +135,33 @@ const Session = (() => {
             .catch(() => alert("Copy failed — select the link and copy manually"));
     }
 
+    function reset() {
+        // Clear form fields
+        document.getElementById("alice-name").value = "";
+        document.getElementById("memory-question").value = "";
+        document.getElementById("memory-answer").value = "";
+
+        // Reset char counters
+        document.getElementById("q-count").textContent = "0";
+        document.getElementById("a-count").textContent = "0";
+
+        // Reset button
+        const createBtn = document.getElementById("create-btn");
+        if (createBtn) {
+            createBtn.textContent = "Generate Challenge Link";
+            createBtn.disabled = false;
+        }
+
+        // Clear session state
+        currentSessionId = null;
+        currentLink = null;
+
+        // Regenerate keypair for next session
+        Crypto.generateKeyPair().then(kp => {
+            aliceKeyPair = kp;
+        });
+    }
+
     // ─── Bob ──────────────────────────────────────────────────────────────────
 
     async function initBob(sessionId) {
@@ -234,5 +261,5 @@ const Session = (() => {
         }
     }
 
-    return { initAlice, create, copyLink, initBob, submitAnswer };
+    return { initAlice, create, copyLink, initBob, submitAnswer, reset };
 })();
