@@ -3,13 +3,37 @@
 
 {% block content %}
 
-<!-- Screen 1: Landing -->
+<!--
+    ALICE'S FLOW — 4 screens, shown one at a time by UI.showStep()
+    ═══════════════════════════════════════════════════════════════
+    step-landing    → user lands on the page, sees the pitch
+    step-create     → Alice fills in name, question, answer
+    step-waiting    → Alice shares link/QR, SSE stream open
+    step-alice-pass → Bob passed, key exchange complete
+    step-alice-fail → Bob failed, channel stayed closed
+
+    All screens share .screen class. UI.showStep() hides all .screen
+    elements then shows only the target. The .hidden class is the
+    default off state. fade-in is re-applied on every transition
+    via void el.offsetWidth reflow trick in ui.js.
+-->
+
+<!-- ── Screen 1: Landing ─────────────────────────────────────────
+     First thing Alice sees. No JS required to render this screen.
+     "Start Verification →" simply transitions to step-create.
+     Session.initAlice() runs in the background on DOMContentLoaded
+     to pre-generate Alice's keypair while she reads this screen.
+     By the time she fills the form, keys are ready.
+─────────────────────────────────────────────────────────────── -->
 <div id="step-landing" class="screen">
     <h1>Your memory is<br>the password.</h1>
     <p class="subtitle">
         Prove someone is who they say they are using a shared memory
         only the real them would know. No passwords. No biometrics. No AI can fake it.
     </p>
+
+    <!-- How it works — uses .step-item not .screen, so UI.showStep()
+         never accidentally hides these when transitioning screens -->
     <div class="how-it-works">
         <div class="step-item">
             <span class="step-num">01</span>
@@ -26,12 +50,35 @@
             <span>Identity verified. Encrypted channel established.</span>
         </div>
     </div>
+
     <button class="btn-primary" onclick="UI.showStep('step-create')">
         Start Verification →
     </button>
 </div>
 
-<!-- Screen 2: Alice creates memory challenge -->
+
+<!-- ── Screen 2: Alice creates memory challenge ──────────────────
+     Alice fills in her name, question, and answer.
+
+     Key generation:
+       Session.initAlice() starts generating the ECDH P-256 keypair
+       the moment the page loads (before Alice even clicks anything).
+       The #key-status div shows a pulse while generating, then
+       switches to "✓ Encryption keys ready" when done.
+       The submit button (#create-btn) stays disabled until keys
+       are ready — enforced in session.js initAlice().
+
+     Answer privacy:
+       The answer field never leaves the browser as plaintext.
+       Session.create() embeds it via the server's /api/session
+       endpoint which calls the embedding service and stores only
+       the vector. The raw text is discarded server-side.
+       The privacy note at the bottom reinforces this to Alice.
+
+     Character counters:
+       ui.js wires up the q-count and a-count spans to their
+       respective textareas on DOMContentLoaded.
+─────────────────────────────────────────────────────────────── -->
 <div id="step-create" class="screen hidden">
     <h2>Create your challenge</h2>
     <p class="subtitle">Ask something only the real person would know.<br>
@@ -39,6 +86,7 @@
 
     <div class="form-group">
         <label>Your name</label>
+        <!-- maxlength matches server-side validation in session.py -->
         <input type="text" id="alice-name" placeholder="Alice" maxlength="50" />
     </div>
 
@@ -47,6 +95,8 @@
         <textarea id="memory-question"
             placeholder="e.g. What did we order at Chipotle the first time we hung out?"
             maxlength="500" rows="2"></textarea>
+        <!-- char-count position: absolute, sits bottom-right of textarea
+             value updated by ui.js on every input event -->
         <span class="char-count"><span id="q-count">0</span>/500</span>
     </div>
 
@@ -58,28 +108,57 @@
         <span class="char-count"><span id="a-count">0</span>/500</span>
     </div>
 
+    <!-- Key status — pulse animates while generating, .ready class
+         turns it green when Session.initAlice() resolves.
+         The id="key-status-text" span is updated by session.js. -->
     <div class="key-status" id="key-status">
         <span class="pulse"></span>
         <span id="key-status-text">Generating your encryption keys...</span>
     </div>
 
+    <!-- Disabled until keypair is ready. session.js enables it
+         in initAlice() after Crypto.generateKeyPair() resolves. -->
     <button class="btn-primary" id="create-btn" onclick="Session.create()" disabled>
         Generate Challenge Link
     </button>
+
     <p class="privacy-note">Your answer is converted to a mathematical vector — the raw text is never sent to the server.</p>
 </div>
 
-<!-- Screen 3: Share link, wait for Bob -->
+
+<!-- ── Screen 3: Share link + wait for Bob ───────────────────────
+     Alice sees this immediately after Session.create() succeeds.
+     Two ways for Bob to access the session:
+       1. Copy the link and paste it anywhere
+       2. Scan the QR code (base64 PNG generated server-side by qrcode lib)
+
+     SSE connection:
+       Session.create() calls connectAliceSSE() after showing this
+       screen. That opens an EventSource to /api/session/<id>/stream.
+       The connection stays open until Bob verifies (VERIFIED or FAILED
+       event arrives), then the stream closes and Alice transitions
+       to step-alice-pass or step-alice-fail automatically.
+
+     The pulse indicator here is purely visual — it doesn't reflect
+     actual SSE connection state, just communicates "waiting" to Alice.
+─────────────────────────────────────────────────────────────── -->
 <div id="step-waiting" class="screen hidden">
     <h2>Share this with Bob.</h2>
     <p class="subtitle">This link contains your memory question and your public key.<br>
     Bob must answer correctly before the encrypted channel opens.</p>
 
+    <!-- Link box — code truncates with text-overflow: ellipsis on desktop,
+         wraps on mobile (components.css mobile breakpoint) -->
     <div class="link-box">
         <code id="session-link"></code>
+        <!-- Session.copyLink() uses navigator.clipboard.writeText()
+             and briefly changes button text to "Copied!" -->
         <button class="btn-secondary" onclick="Session.copyLink()">Copy</button>
     </div>
 
+    <!-- QR code — src populated by Session.create() from API response.
+         Server generates via qrcode[pil] library, returns base64 PNG.
+         Border is dark ink (var(--text)) matching academic aesthetic. -->
     <div id="qr-container">
         <img id="qr-code" src="" alt="QR Code" />
         <p class="qr-hint">Scan with any camera. This works on any device with a browser</p>
@@ -91,13 +170,37 @@
     </div>
 </div>
 
-<!-- Screen 4A: Bob passed -->
+
+<!-- ── Screen 4A: Bob passed ─────────────────────────────────────
+     Shown when SSE stream receives event.event === "VERIFIED".
+     connectAliceSSE() in session.js:
+       1. Closes the EventSource
+       2. Imports Bob's public key from event.bob_pubkey_jwk
+       3. Derives shared AES-GCM key via ECDH
+       4. Updates #alice-score with event.score
+       5. Calls UI.showStep('step-alice-pass')
+
+     "Start New Verification" calls Session.reset() FIRST:
+       - Clears all form fields (name, question, answer)
+       - Resets char counters to 0
+       - Resets button text and re-disables it
+       - Clears currentSessionId and currentLink state
+       - Generates a fresh keypair for the next session
+     Then UI.showStep('step-create') shows the clean form.
+
+     Without reset(), the form would retain previous values and
+     the button would be stuck on "Creating..." — the bug this fixes.
+─────────────────────────────────────────────────────────────── -->
 <div id="step-alice-pass" class="screen hidden">
     <h2>Identity Verified.</h2>
+    <!-- emphasis class: accent color, mono font, smaller size —
+         acts as a subheading without competing with the h2 -->
     <p class="emphasis">Bob answered correctly. The channel is now open.</p>
+
     <div class="result-details">
         <div class="proof-row">
             <span class="label">Memory match</span>
+            <!-- Populated by session.js: `${event.score}% match ✓` -->
             <span class="value success" id="alice-score"></span>
         </div>
         <div class="proof-row">
@@ -109,19 +212,44 @@
             <span class="value success">Via shared memory ✓</span>
         </div>
     </div>
+
     <p class="result-note">Bob's public key has been delivered to your device.<br>
     You can now communicate with cryptographic proof of his identity.</p>
-    <button class="btn-secondary" style="margin-top: 32px;" onclick="UI.showStep('step-create')">Start New Verification</button>
+
+    <!-- reset() clears stale state before showing the form again.
+         Order matters: reset() first, then showStep(). -->
+    <button class="btn-secondary" style="margin-top: 32px;"
+        onclick="Session.reset(); UI.showStep('step-create')">
+        Start New Verification
+    </button>
 </div>
 
-<!-- Screen 4B: Bob failed -->
+
+<!-- ── Screen 4B: Bob failed ─────────────────────────────────────
+     Shown when SSE stream receives event.event === "FAILED".
+     connectAliceSSE() in session.js:
+       1. Closes the EventSource
+       2. Updates #alice-fail-score with event.score
+       3. Calls UI.showStep('step-alice-fail')
+
+     Alice's private key is never used — no key exchange occurred.
+     The session is locked server-side (phase: FAILED) and cannot
+     be retried by anyone — one-time use guarantee enforced in verify.py.
+
+     "Try Again" creates a completely new session — same reset()
+     call clears all state before showing the form.
+
+     No phase-icon div here — removed because it was rendering
+     as an empty gap when no emoji was set.
+─────────────────────────────────────────────────────────────── -->
 <div id="step-alice-fail" class="screen hidden">
-    <div class="phase-icon"></div>
     <h2>Verification Failed.</h2>
     <p>The answer didn't match your memory. No key exchange occurred.</p>
+
     <div class="result-details">
         <div class="proof-row">
             <span class="label">Memory match</span>
+            <!-- Populated by session.js: `${event.score}% match` -->
             <span class="value danger" id="alice-fail-score"></span>
         </div>
         <div class="proof-row">
@@ -129,13 +257,31 @@
             <span class="value danger">Not completed ✗</span>
         </div>
     </div>
+
     <p class="result-note">Alice's public key was never shared. The channel stayed closed.</p>
-    <button class="btn-secondary" style="margin-top: 32px;" onclick="UI.showStep('step-create')">Try Again</button>
+
+    <!-- Same reset() pattern as the pass screen -->
+    <button class="btn-secondary" style="margin-top: 32px;"
+        onclick="Session.reset(); UI.showStep('step-create')">
+        Try Again
+    </button>
 </div>
 
 {% endblock %}
 
 {% block scripts %}
+<!--
+    Script load order matters:
+      1. crypto.js    — Crypto object must exist before session.js references it
+      2. sse.js       — SSE helpers loaded before session.js uses them
+      3. session.js   — Session object references Crypto and UI
+      4. ui.js        — UI object, char counter wiring on DOMContentLoaded
+
+    Session.initAlice() called after DOMContentLoaded to ensure all
+    DOM elements exist before session.js tries to reference them.
+    initAlice() kicks off keypair generation immediately so keys
+    are ready before Alice finishes filling the form.
+-->
 <script src="/static/js/crypto.js"></script>
 <script src="/static/js/sse.js"></script>
 <script src="/static/js/session.js"></script>
