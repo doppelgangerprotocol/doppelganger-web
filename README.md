@@ -164,23 +164,6 @@ open http://localhost:5000/verify
 
 ---
 
-## Deploy to Railway
-
-1. Push to GitHub (`github.com/doppelgangerprotocol/web`)
-2. [railway.app](https://railway.app) → New Project → Deploy from GitHub repo
-3. **+ New → Database → Redis** (Railway wires `REDIS_URL` automatically)
-4. Add variables in Railway dashboard:
-   ```
-   FLASK_ENV=production
-   SECRET_KEY=<openssl rand -hex 32>
-   EMBEDDING_SERVICE_URL=<your service>
-   BASE_URL=https://doppelgangerprotocol.app
-   ```
-5. Settings → Domains → add `doppelgangerprotocol.app`
-6. Also add `realxreal.app` as a second domain (same deploy, both point here)
-
----
-
 ## Implementations
 
 | Implementation | Platform | Repo |
