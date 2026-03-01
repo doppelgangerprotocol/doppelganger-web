@@ -149,7 +149,7 @@ DELETE /api/session/<id>              Manual teardown (auto-expires after 30 min
 ## Local Setup
 
 ```bash
-git clone https://github.com/doppelgangerprotocol/web
+git clone https://github.com/doppelgangerprotocol-web
 cd web
 
 python -m venv venv && source venv/bin/activate
@@ -168,7 +168,7 @@ open http://localhost:5000/verify
 
 | Implementation | Platform | Repo |
 |---|---|---|
-| **This repo** | Web (reference) | `github.com/doppelgangerprotocol/web` |
+| **This repo** | Web (reference) | `https://github.com/doppelgangerprotocol/doppelganger-web` |
 | **realxreal** | iOS | [realxreal.app](https://realxreal.app) |
 
 Built your own implementation? Open a PR to add it here.
