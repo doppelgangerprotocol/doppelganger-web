@@ -28,7 +28,7 @@ session_bp = Blueprint("session", __name__)
 
 
 @session_bp.route("/session", methods=["POST"])
-@limiter.limit("100 per hour")
+@limiter.limit("500 per hour")
 def create_session():
     """
     Alice creates a new verification session.
