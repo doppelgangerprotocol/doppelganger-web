@@ -10,7 +10,7 @@
     border: none;
     padding: 14px 28px;
     font-family: var(--mono);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -49,7 +49,7 @@
 .form-group label {
     display: block;
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 15px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: var(--text-muted);
@@ -57,7 +57,7 @@
 }
 
 .label-note {
-    font-size: 10px;
+    font-size: 15px;
     color: var(--text-muted);
     text-transform: none;
     letter-spacing: 0;
@@ -103,13 +103,13 @@ textarea::placeholder,
     bottom: 10px;
     right: 12px;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 15px;
     color: var(--text-muted);
 }
 
 .privacy-note {
     margin-top: var(--space-md);
-    font-size: 11px;
+    font-size: 15px;
     color: var(--text-muted);
     font-family: var(--mono);
 }
@@ -130,7 +130,7 @@ textarea::placeholder,
 .link-box code {
     flex: 1;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 15px;
     color: var(--text);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -152,7 +152,7 @@ textarea::placeholder,
 }
 
 .qr-hint {
-    font-size: 11px;
+    font-size: 15px;
     color: var(--text-muted);
     margin-top: var(--space-sm);
     font-family: var(--mono);
@@ -165,7 +165,7 @@ textarea::placeholder,
     align-items: center;
     gap: 10px;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 12\5px;
     color: var(--text-muted);
     margin-bottom: 20px;
 }
@@ -177,14 +177,14 @@ textarea::placeholder,
     .btn-primary {
         width: 100%;
         padding: 16px 24px;
-        font-size: 14px;
+        font-size: 15px;
         text-align: center;
         min-height: 52px;
     }
 
     .btn-secondary {
         width: 100%;
-        padding: 14px 20px;
+        padding: 15px 20px;
         text-align: center;
         min-height: 48px;
     }
@@ -213,7 +213,7 @@ textarea::placeholder,
     }
 
     .link-box code {
-        font-size: 11px;
+        font-size: 15px;
         white-space: normal;
         word-break: break-all;
     }
@@ -230,6 +230,6 @@ textarea::placeholder,
     }
 
     .key-status {
-        font-size: 11px;
+        font-size: 15px;
     }
 }

@@ -37,12 +37,12 @@
     <div class="how-it-works">
         <div class="step-item">
             <span class="step-num">01</span>
-            <span>You create a memory challenge only your contact can answer</span>
+            <span>You create a memory challenge only your contact can answer.</span>
         </div>
         <div class="step-arrow">→</div>
         <div class="step-item">
             <span class="step-num">02</span>
-            <span>They answer it; that proof unlocks the key exchange</span>
+            <span>If they answer it, the key exchange is unlocked.</span>
         </div>
         <div class="step-arrow">→</div>
         <div class="step-item">
@@ -80,7 +80,7 @@
        respective textareas on DOMContentLoaded.
 ─────────────────────────────────────────────────────────────── -->
 <div id="step-create" class="screen hidden">
-    <h2>Create your challenge</h2>
+    <h2>Create your challenge.</h2>
     <p class="subtitle">Ask something only the real person would know.<br>
     Your encryption keys are being generated in your browser right now.</p>
 
@@ -93,7 +93,7 @@
     <div class="form-group">
         <label>Memory question <span class="label-note">(Bob will see this)</span></label>
         <textarea id="memory-question"
-            placeholder="e.g. What did we order at Chipotle the first time we hung out?"
+            placeholder="e.g. What cities were our layovers on our way to OSCW 2026?"
             maxlength="500" rows="2"></textarea>
         <!-- char-count position: absolute, sits bottom-right of textarea
              value updated by ui.js on every input event -->
@@ -101,9 +101,9 @@
     </div>
 
     <div class="form-group">
-        <label>Your answer <span class="label-note">(never stored — only your device sees this)</span></label>
+        <label>Your answer <span class="label-note">(Bob will never see this)</span></label>
         <textarea id="memory-answer"
-            placeholder="e.g. Chicken burrito bowl with extra guac"
+            placeholder="e.g. We had layovers in Detroit, Seattle, and Tokyo."
             maxlength="500" rows="2"></textarea>
         <span class="char-count"><span id="a-count">0</span>/500</span>
     </div>
@@ -122,7 +122,7 @@
         Generate Challenge Link
     </button>
 
-    <p class="privacy-note">Your answer is converted to a mathematical vector — the raw text is never sent to the server.</p>
+    <p class="privacy-note">Your answer is converted to a mathematical vector and only temporarily seen by the embedding service. </p>
 </div>
 
 

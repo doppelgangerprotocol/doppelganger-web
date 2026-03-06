@@ -7,16 +7,17 @@
     --bg:           #F2EDE4;
     --surface:      #EDE7DC;
     --border:       #D4C9B8;
-    --text:         #1A1814;
-    --text-muted:   #7A7060;
-    --accent:       #1A1814;
-    --accent-dim:   #1A181410;
+    --text:         #000000;
+    --text-muted:   #000000;
+    --accent:       #000000;
+    --accent-dim:   #00000010;
     --danger:       #8B2020;
     --success:      #1A5C35;
 
     /* Typography */
-    --mono: 'Courier Prime', 'Courier New', monospace;
-    --sans: 'freight-text-pro', 'Georgia', serif;
+    /* --mono: 'Courier Prime', 'Courier New', monospace; */
+    --mono: monospace;
+    /* --sans: 'freight-text-pro', 'Georgia', serif; */
 
     /* Spacing */
     --space-xs:  4px;
@@ -28,9 +29,12 @@
     --space-3xl: 60px;
 
     /* Radii — more restrained, academic */
-    --radius-sm: 2px;
+    /* --radius-sm: 2px;
     --radius-md: 3px;
-    --radius-lg: 4px;
+    --radius-lg: 4px; */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
 
     /* Transitions */
     --transition: 0.15s ease;
@@ -57,7 +61,7 @@ body {
 h1 {
     font-family: var(--mono);
     font-size: clamp(32px, 5vw, 52px);
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1.1;
     letter-spacing: -0.5px;
     margin-bottom: 20px;
@@ -67,7 +71,7 @@ h1 {
 h2 {
     font-family: var(--mono);
     font-size: clamp(22px, 3.5vw, 34px);
-    font-weight: 400;
+    font-weight: 300;
     letter-spacing: -0.3px;
     line-height: 1.2;
     margin-bottom: 12px;
@@ -76,7 +80,7 @@ h2 {
 
 p {
     font-family: var(--mono);
-    font-size: 15px;
+    font-size: 20px;
     line-height: 1.7;
     color: var(--text-muted);
     margin-bottom: var(--space-md);

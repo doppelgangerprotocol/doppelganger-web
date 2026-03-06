@@ -75,7 +75,7 @@ const Session = (() => {
             ProtocolLog.emit("network", "POST /api/session → creating session", {
                 alice_name: aliceName,
                 question: memoryQuestion,
-                answer: "being embedded client-side — raw text stays here",
+                answer: "being embedded via temporary embedding service",
                 alice_pubkey_x: alicePubkeyJwk.x.slice(0, 16) + "...",
             });
 
