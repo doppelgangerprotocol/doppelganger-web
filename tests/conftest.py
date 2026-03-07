@@ -108,7 +108,7 @@ def app(fake_redis):
     flask_app.config["TESTING"] = True
     flask_app.config["BASE_URL"] = "http://localhost:5001"
     flask_app.config["SIMILARITY_THRESHOLD"] = 0.75
-    flask_app.config["SESSION_TTL_SECONDS"] = 1800
+    flask_app.config["SESSION_TTL_SECONDS"] = 300
 
     # Disable rate limiting
     limiter.enabled = False
