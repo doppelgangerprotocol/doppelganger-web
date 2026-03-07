@@ -142,6 +142,29 @@
      The pulse indicator here is purely visual — it doesn't reflect
      actual SSE connection state, just communicates "waiting" to Alice.
 ─────────────────────────────────────────────────────────────── -->
+<!-- Vector preview — shown after session creation on step-waiting.
+        Populated by session.js from data.vector_preview.
+        Hidden by default, revealed once data arrives. -->
+<div id="vector-preview-block" style="display:none; margin-top: 28px;">
+    <p style="font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); margin-bottom:8px;">
+        Embedding vector for: "<span id="vector-question-label"></span>"
+    </p>
+    <p style="font-size:10px; color:var(--text-muted); margin-bottom:6px;">
+        First 40 of <span id="vector-dimensions"></span> dimensions · stored in Redis · raw answer discarded
+    </p>
+    <code id="vector-preview" style="
+        display: block;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        font-size: 10px;
+        line-height: 1.8;
+        color: var(--text);
+        word-break: break-all;
+        white-space: normal;
+    "></code>
+</div>
 <div id="step-waiting" class="screen hidden">
     <h2>Share this with Bob.</h2>
     <p class="subtitle">This link contains your memory question and your public key.<br>

@@ -108,7 +108,22 @@ const Session = (() => {
             document.getElementById("session-link").textContent = data.link;
             document.getElementById("qr-code").src = data.qr_code;
             UI.showStep("step-waiting");
+            // ── Vector preview ─────────────────────────────────────────────
+            const previewBlock = document.getElementById("vector-preview-block");
+            const previewEl    = document.getElementById("vector-preview");
+            const labelEl      = document.getElementById("vector-question-label");
+            const dimsEl       = document.getElementById("vector-dimensions");
 
+            if (data.vector_preview && previewBlock) {
+                labelEl.textContent = memoryQuestion.slice(0, 60) + (memoryQuestion.length > 60 ? "..." : "");
+                dimsEl.textContent  = data.vector_dimensions;
+                previewEl.textContent = "[" + data.vector_preview.join(", ") + "...]";
+                previewBlock.style.display = "block";
+
+                // Log to protocol panel
+                ProtocolLog.embeddingReceived(data.vector_preview);
+            }
+            // ── End vector preview ──────────────────────────────────────────
             connectAliceSSE(data.session_id);
 
         } catch (err) {
