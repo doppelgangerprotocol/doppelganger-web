@@ -166,7 +166,7 @@ textarea::placeholder,
     gap: 10px;
     font-family: var(--mono);
     font-size: 12\5px;
-    color: var(--text-muted);
+    color: var(--success);
     margin-bottom: 20px;
 }
 
