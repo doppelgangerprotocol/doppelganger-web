@@ -463,14 +463,23 @@ const ProtocolLog = (() => {
         });
     }
 
-    function embeddingReceived(vector) {
+    // function embeddingReceived(vector) {
+    //     const preview = vector.slice(0, 8).map(v => v.toFixed(4));
+    //     emit("embed", "Answer embedded → vector stored", {
+    //         model: "all-MiniLM-L6-v2",
+    //         dimensions: vector.length,
+    //         "preview [0..7]": preview
+    //     });
+    // }
+
+    function embeddingReceived(vector, fullDimensions) {
         const preview = vector.slice(0, 8).map(v => v.toFixed(4));
         emit("embed", "Answer embedded → vector stored", {
             model: "all-MiniLM-L6-v2",
-            dimensions: vector.length,
-            "preview [0..7]": preview
+            dimensions: fullDimensions || vector.length,  // uses 384 from API
+            "preview [0..8]": preview
         });
-    }
+}
 
     function similarityScored(score, result) {
         emit("score", `Cosine similarity → ${result}`, {
@@ -486,7 +495,7 @@ const ProtocolLog = (() => {
     function phaseTransition(from, to) {
         emit("phase", `Session phase: ${from} → ${to}`, {
             stored_in: "Redis",
-            ttl: "30 minutes",
+            ttl: "5 minutes",
             one_time_use: "session locked after first verify attempt"
         });
     }

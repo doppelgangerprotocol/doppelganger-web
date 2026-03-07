@@ -121,7 +121,8 @@ const Session = (() => {
                 previewBlock.style.display = "block";
 
                 // Log to protocol panel
-                ProtocolLog.embeddingReceived(data.vector_preview);
+                // ProtocolLog.embeddingReceived(data.vector_preview);
+                ProtocolLog.embeddingReceived(data.vector_preview, data.vector_dimensions);
             }
             // ── End vector preview ──────────────────────────────────────────
             connectAliceSSE(data.session_id);

@@ -35,7 +35,7 @@ class FakeRedis:
         pass
 
     def ttl(self, key):
-        return 1800
+        return 300
 
     def exists(self, key):
         return 1 if key in self._store else 0

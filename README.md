@@ -103,7 +103,7 @@ GET    /api/session/<id>/stream       SSE — Alice waits for Bob's result
 DELETE /api/session/<id>              Manual teardown (auto-expires after 30 min)
 ```
 
-### What the server stores (Redis, 30 min TTL)
+### What the server stores (Redis, 5 min TTL)
 
 | Field | Value | Notes |
 |---|---|---|
@@ -125,7 +125,7 @@ DELETE /api/session/<id>              Manual teardown (auto-expires after 30 min
 | Raw memory answers never stored | Embedded server-side, raw text discarded |
 | Private keys never leave the browser | Web Crypto non-extractable flag |
 | Session IDs unguessable | `secrets.token_urlsafe(32)` — 256 bits entropy |
-| Sessions self-destruct | Redis TTL = 30 min |
+| Sessions self-destruct | Redis TTL = 5 min |
 | No accounts / no PII persisted | Ephemeral by design |
 | `.app` TLD enforces HTTPS | Google policy — SSL required at the domain level |
 | Rate limited | 10 sessions/hour, 5 verify attempts/min per IP |

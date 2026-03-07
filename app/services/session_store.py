@@ -47,7 +47,7 @@ class SessionStore:
         memory_question: str,
         answer_embedding: list,
         alice_pubkey_jwk: dict,
-        ttl: int = 1800
+        ttl: int = 300
     ) -> dict:
         key = self._key(session_id)
         data = {
