@@ -137,11 +137,10 @@ DELETE /api/session/<id>              Manual teardown (auto-expires after 30 min
 | Layer | Technology |
 |---|---|
 | Backend | Flask + Gunicorn |
-| Session store | Redis (Railway plugin) |
+| Session store | Redis |
 | Client crypto | Web Crypto API — ECDH P-256 + AES-GCM 256 |
 | Real-time | Server-Sent Events |
-| Embedding | realxreal embedding microservice |
-| Hosting | Railway |
+| Embedding | all-MiniLM-L6-v2 (microservice) |
 | Domain | `doppelgangerprotocol.app/verify` |
 
 ---
