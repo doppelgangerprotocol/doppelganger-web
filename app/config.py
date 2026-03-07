@@ -6,7 +6,7 @@ class BaseConfig:
     PORT = int(os.environ.get("PORT", 5000))
     REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
     EMBEDDING_SERVICE_URL = os.environ.get("EMBEDDING_SERVICE_URL", "http://localhost:8001")
-    SESSION_TTL_SECONDS = int(os.environ.get("SESSION_TTL_SECONDS", 1800))
+    SESSION_TTL_SECONDS = int(os.environ.get("SESSION_TTL_SECONDS", 300))
     SIMILARITY_THRESHOLD = float(os.environ.get("SIMILARITY_THRESHOLD", 0.75))
     RATELIMIT_STORAGE_URI = os.environ.get("REDIS_URL", "redis://localhost:6379")
     # Primary domain for generating one-time links

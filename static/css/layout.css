@@ -39,7 +39,7 @@ header {
 /* Main */
 main {
     flex: 1;
-    max-width: 640px;
+    max-width: 900px;
     margin: 0 auto;
     padding: var(--space-3xl) var(--space-lg);
     width: 100%;
@@ -116,7 +116,87 @@ footer a:hover { color: var(--text); }
     padding-top: 4px;
 }
 
+/* ── Step-waiting two-column layout ─────────────────────────── */
+
+.waiting-layout {
+    display: flex;
+    flex-direction: row-reverse; /* main content left, vector right */
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.waiting-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.waiting-vector {
+    width: 220px;
+    flex-shrink: 0;
+    padding-top: 4px;
+}
+
+.vector-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.vector-question {
+    font-size: 13px;
+    color: var(--text);
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    word-break: break-word;
+}
+
+.vector-meta {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.vector-code {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.9;
+    color: #3d2d5a;
+    word-break: break-all;
+    white-space: normal;
+    margin-bottom: 10px;
+}
+
+.vector-footnote {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+}
+
 /* Responsive */
+@media (max-width: 700px) {
+    .waiting-layout {
+        flex-direction: column;
+    }
+
+    .waiting-vector {
+        width: 100%;
+        border-top: 1px solid var(--border);
+        padding-top: 20px;
+        margin-top: 8px;
+    }
+}
+
 @media (max-width: 600px) {
     header  { padding: var(--space-md) 20px; }
     main    { padding: 40px 20px; }
@@ -130,7 +210,6 @@ footer a:hover { color: var(--text); }
         padding: 14px 16px;
     }
 
-    /* Tighter wordmark on small screens */
     .wordmark {
         font-size: 13px;
     }
