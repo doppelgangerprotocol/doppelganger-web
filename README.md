@@ -107,21 +107,6 @@ GET    /api/session/<id>/stream       SSE — Alice waits for Bob's result
 DELETE /api/session/<id>              Manual teardown (auto-expires after 5 min)
 ```
 
-### POST /api/session — response
-
-```json
-{
-  "session_id": "abc123...",
-  "link": "https://doppelgangerprotocol.app/verify/s/abc123...",
-  "qr_code": "data:image/png;base64,...",
-  "vector_preview": [0.0113, 0.0026, -0.0573, ...],
-  "vector_dimensions": 384
-}
-```
-
-`vector_preview` contains the first 40 values of the 384-dimension embedding.  
-Returned for educational display only — the full vector stays in Redis.
-
 ### What the server stores (Redis, 5 min TTL)
 
 | Field | Value | Notes |
@@ -141,11 +126,10 @@ Returned for educational display only — the full vector stays in Redis.
 | Property | How |
 |---|---|
 | Alice's pubkey never exposed to unverified Bob | Only returned in `/verify` response on PASS |
-| Raw memory answers never stored | Embedded server-side, raw text discarded immediately |
-| Private keys never leave the browser | Web Crypto `extractable: false` |
-| Session IDs unguessable | `secrets.token_urlsafe(32)` — 256 bits of entropy |
-| Sessions self-destruct | Redis TTL = 5 minutes |
-| One-time use enforced | Session locked after first verify attempt regardless of result |
+| Raw memory answers never stored | Embedded server-side, raw text discarded |
+| Private keys never leave the browser | Web Crypto non-extractable flag |
+| Session IDs unguessable | `secrets.token_urlsafe(32)` — 256 bits entropy |
+| Sessions self-destruct | Redis TTL = 5 min |
 | No accounts / no PII persisted | Ephemeral by design |
 | `.app` TLD enforces HTTPS | Google registry policy — SSL required at the domain level |
 | Rate limited | 500 sessions/hour, 20 verify attempts/min per IP |
