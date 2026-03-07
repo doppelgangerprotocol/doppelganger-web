@@ -1,8 +1,7 @@
 # The Doppelgänger Protocol
 ### `doppelgangerprotocol.app/verify`
 
-A browser-based reference implementation of The Doppelgänger Protocol™ —  
-a new standard for human-layer authentication using shared memory as a cryptographic trust anchor.
+A browser-based reference implementation of The Doppelgänger Protocol. This is a new standard for human-layer authentication using shared memory as a cryptographic trust anchor.
 
 **The protocol is open.** realxreal is the first mobile implementation.  
 Anyone can build on this.
