@@ -18,8 +18,9 @@ EXPOSE $PORT
 CMD gunicorn wsgi:app \
     --bind 0.0.0.0:$PORT \
     --worker-class gevent \
-    --workers 4 \
+    --workers 2 \
     --worker-connections 1000 \
     --timeout 120 \
+    --graceful-timeout 30 \
     --access-logfile - \
     --error-logfile -

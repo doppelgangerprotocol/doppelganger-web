@@ -91,8 +91,8 @@ const Session = (() => {
             });
 
             if (!resp.ok) {
-                const err = await resp.json();
-                alert(`Error: ${err.error}`);
+                const err = await resp.json().catch(() => ({}));
+                alert(err.error || `Server error (${resp.status}). Please try again.`);
                 createBtn.disabled = false;
                 createBtn.textContent = "Generate Challenge Link";
                 return;
@@ -173,11 +173,24 @@ const Session = (() => {
                 document.getElementById("alice-fail-score").textContent = `${event.score}% match`;
                 UI.showStep("step-alice-fail");
             }
+
+            if (event.event === "EXPIRED") {
+                es.close();
+                ProtocolLog.emit("phase", "Session expired before anyone answered", {
+                    reason: "TTL reached — Redis deleted the session"
+                });
+                alert("This challenge expired before anyone answered. Create a new one.");
+                reset();
+                UI.showStep("step-create");
+            }
         };
 
         es.onerror = () => {
-            ProtocolLog.emit("network", "SSE connection error", {
-                note: "Stream may have closed after terminal event — this is normal"
+            ProtocolLog.emit("network",
+                es.readyState === EventSource.CLOSED
+                    ? "SSE stream closed"
+                    : "SSE dropped — browser is reconnecting", {
+                note: "On reconnect the server re-sends the result if Bob already answered"
             });
         };
     }
@@ -351,7 +364,19 @@ const Session = (() => {
                 })
             });
 
-            const data = await resp.json();
+            const data = await resp.json().catch(() => ({}));
+
+            if (resp.status === 404 || resp.status === 409) {
+                ProtocolLog.emit("phase", "Session no longer available", {
+                    status: resp.status, reason: data.error
+                });
+                UI.showStep("step-expired");
+                return;
+            }
+            if (!resp.ok) {
+                throw new Error(data.error || `Server error (${resp.status})`);
+            }
+
             ProtocolLog.similarityScored(data.score, data.result);
 
             if (data.result === "PASS") {
