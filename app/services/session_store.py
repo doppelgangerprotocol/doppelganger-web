@@ -21,18 +21,33 @@ Session schema:
 
 import json
 import time
-import redis
-import os
 from typing import Optional
+
+from app.services.redis_client import get_redis
+
+# Atomically move a session out of WAITING_FOR_BOB and announce the result.
+# Returns -1 if the session expired, 0 if it was already completed, 1 on success.
+# KEYS[1] = session key
+# ARGV[1] = pub/sub channel, ARGV[2] = event JSON, ARGV[3..] = field/value pairs
+_FINALIZE_LUA = """
+if redis.call('EXISTS', KEYS[1]) == 0 then
+    return -1
+end
+if redis.call('HGET', KEYS[1], 'phase') ~= 'WAITING_FOR_BOB' then
+    return 0
+end
+redis.call('HSET', KEYS[1], unpack(ARGV, 3))
+redis.call('PUBLISH', ARGV[1], ARGV[2])
+return 1
+"""
 
 
 class SessionStore:
 
     def __init__(self):
-        self.r = redis.from_url(
-            os.environ.get("REDIS_URL", "redis://localhost:6379"),
-            decode_responses=True
-        )
+        # Shared, capped pool. Constructing a SessionStore no longer opens connections.
+        self.r = get_redis()
+        self._finalize = self.r.register_script(_FINALIZE_LUA)
 
     def _key(self, session_id: str) -> str:
         return f"session:{session_id}"
@@ -61,7 +76,7 @@ class SessionStore:
             "similarity_score": "",
             "created_at": str(int(time.time()))
         }
-        pipe = self.r.pipeline()
+        pipe = self.r.pipeline(transaction=True)
         pipe.hset(key, mapping=data)
         pipe.expire(key, ttl)
         pipe.execute()
@@ -71,26 +86,41 @@ class SessionStore:
         data = self.r.hgetall(self._key(session_id))
         return data if data else None
 
-    def update(self, session_id: str, updates: dict) -> bool:
-        key = self._key(session_id)
-        if not self.r.exists(key):
-            return False
-        # Preserve remaining TTL
-        ttl = self.r.ttl(key)
-        pipe = self.r.pipeline()
-        pipe.hset(key, mapping=updates)
-        if ttl > 0:
-            pipe.expire(key, ttl)
-        pipe.execute()
-        return True
+    def get_phase(self, session_id: str) -> Optional[str]:
+        """Cheap existence/phase check — avoids pulling the 384-float embedding."""
+        return self.r.hget(self._key(session_id), "phase")
+
+    def finalize(self, session_id: str, updates: dict, event: dict) -> int:
+        """
+        Atomic WAITING_FOR_BOB -> VERIFIED/FAILED transition + publish.
+        Only one Bob can ever win, even if two submit at the same instant.
+        """
+        args = [self._channel(session_id), json.dumps(event)]
+        for field, value in updates.items():
+            args += [field, value]
+        return int(self._finalize(keys=[self._key(session_id)], args=args))
+
+    def terminal_event(self, session_id: str) -> Optional[dict]:
+        """
+        Rebuild the final SSE event from the stored hash.
+        Returns None while still WAITING_FOR_BOB, {"event": "EXPIRED"} if gone.
+        """
+        phase, bob_name, bob_pubkey_jwk, score = self.r.hmget(
+            self._key(session_id),
+            "phase", "bob_name", "bob_pubkey_jwk", "similarity_score"
+        )
+        if phase is None:
+            return {"event": "EXPIRED"}
+        if phase == "VERIFIED":
+            return {
+                "event": "VERIFIED",
+                "bob_name": bob_name,
+                "bob_pubkey_jwk": json.loads(bob_pubkey_jwk),
+                "score": round(float(score) * 100),
+            }
+        if phase == "FAILED":
+            return {"event": "FAILED", "score": round(float(score) * 100)}
+        return None
 
     def delete(self, session_id: str) -> bool:
         return bool(self.r.delete(self._key(session_id)))
-
-    def publish(self, session_id: str, event: dict) -> None:
-        self.r.publish(self._channel(session_id), json.dumps(event))
-
-    def subscribe(self, session_id: str):
-        pubsub = self.r.pubsub()
-        pubsub.subscribe(self._channel(session_id))
-        return pubsub
